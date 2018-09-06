@@ -30,4 +30,17 @@
   1. /usr/bin/yum
   2. /usr/libexec/urlgrabber-ext-down
   3. yum-config-manager  # 找不到文件时 where
+  
 ```
+***
+
+## 修改pip镜像源
+1.  新建文件 ~/.pip/pip.conf 
+2.  设置
+```
+ [global]
+   index-url = https://pypi.tuna.tsinghua.edu.cn/simple  #清华源
+   index-rul = http://pypi.douban.com/simple/    # 豆瓣源
+```
+
+***
