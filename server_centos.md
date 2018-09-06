@@ -21,3 +21,13 @@
 
 > ln -s /bin/pip3.6 /bin/pip3
 
+
+**yum采用python作为命令解释器，python2和python3不兼容，所以如果安装python3后，如果坚持将python链接指向python3，则需要改动一下几个文件中的python解释器路径：**
+
+
+```python
+
+  1. /usr/bin/yum
+  2. /usr/libexec/urlgrabber-ext-down
+  3. yum-config-manager  # 找不到文件时 where
+```
