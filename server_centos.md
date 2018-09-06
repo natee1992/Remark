@@ -44,3 +44,13 @@
 ```
 
 ***
+
+## scp传输文件/文件夹
+
+传输文件
+> scp 传输文件 root@xxx.xxx.xxx.xxx:目标目录
+
+传输文件夹
+> scp -r 传输文件夹 root@xx.xx.x.xx:目标目录
+
+***
