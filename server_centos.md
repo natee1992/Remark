@@ -134,3 +134,21 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 
 **9. 认证模式启动**
 > mongod --auth --config /etc/mongd.conf
+
+***
+
+## yum安装vim
+
+> yum -y install vim*
+
+***
+
+## yum安装zip unzip
+
+> yum install zip unzip
+
+
+***
+
+
+
