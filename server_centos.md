@@ -150,5 +150,19 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 
 ***
 
+## HTTP转HTTPS
+
+*1.阿里云申报ssl证书*
+*2.证书导入*
+*3.Nginx配置*
+```
+        ssl on;
+        ssl_certificate /usr/local/nginx/cert/xxxxxxxxx.pem;
+        ssl_certificate_key /usr/local/nginx/cert/xxxxxxxxxxx.key;
+        ssl_session_timeout 5m;
+        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:laNULL:!MD5:!ADH:!RC4;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+```
 
 
