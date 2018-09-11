@@ -170,4 +170,18 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *1.下载docker*
 > yum install docker
 
-*2. *
+*2.拉取sentry*
+> git clone https://github.com/getsentry/onpremise.git
+
+*3.构建容器并创建数据库和sentry安装目录*
+> mkdir -p data/{sentry,postgres}
+
+*4.生成secret key并添加到docker-compose文件*
+> docker-compose run --rm web config generate-secret-key
+
+*5.重建数据库，并创建sentry超级管理员用户*
+> sudo docker-compose run --rm web upgrade
+
+*6.启动所有服务*
+> docker-compose up -d
+
