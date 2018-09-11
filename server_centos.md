@@ -165,4 +165,9 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
         ssl_prefer_server_ciphers on;
 ```
 
+## Docker搭建Sentry并结合tornado
 
+*1.下载docker*
+> yum install docker
+
+*2. *
