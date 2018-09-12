@@ -117,8 +117,11 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 
  *主机端*
 > mongo
+
 > use admin
+
 > db.createUser({user:"root",pwd:"123456",roles:["root"]})
+
 >  db.getCollectionNames()
 
 *查看是否增加成功*
