@@ -18,6 +18,8 @@
          
 <a href='#cpu'>centos查看cpu信息</a>
 
+<a href='#f_s_g'>flask+gunicorn+gevent+supervisor+nginx部署</a>
+
 <hr>
 <hr>
 
@@ -236,3 +238,6 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 > cat /proc/cpuinfo | grep "cores"|uniq
 
 <hr>
+
+## flask+gunicorn+gevent+supervisor+nginx部署
+<a name='f_s_g'></a>
