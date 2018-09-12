@@ -1,4 +1,11 @@
+**目录导航**
+<a href='#yum_install_python'>yum源安装python3.6</a>
+
+<hr>
+<hr>
+<hr>
 ## yum源安装python3.6
+<a name='yum_install_python'></a>
 #### 安装EPEL和IUS软件源
 
 > yum install epel-release
