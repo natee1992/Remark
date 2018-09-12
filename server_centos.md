@@ -1,11 +1,18 @@
 **目录导航**
-<a href='#yum_install_python'>yum源安装python3.6</a>
+<a href='#1'>yum源安装python3.6</a>
+<a href='#2'>pip修改镜像源</a>
+<a href='#3'>scp传输文件/文件夹</a>
+<a href='#4'> yum安装mongodb 3.4</a>
+<a href='#vim'> yum安装vim</a>
+<a href='#zip> yum安装zip</a>
+<a href='#http> http转https</a>
+<a href='#sentry> docker搭建sentry</a>
+<a href='#cpu'>centos查看cpu信息</a>
+<hr>
+<hr>
 
-<hr>
-<hr>
-<hr>
 ## yum源安装python3.6
-<a name='yum_install_python'></a>
+<a name='1'></a>
 #### 安装EPEL和IUS软件源
 
 > yum install epel-release
@@ -42,6 +49,8 @@
 <hr>
 
 ## 修改pip镜像源
+<a name='2'></a>
+
 1.  新建文件 ~/.pip/pip.conf 
 2.  设置
 ```
@@ -53,7 +62,7 @@
 ***
 
 ## scp传输文件/文件夹
-
+<a name='3'></a>
 传输文件
 > scp 传输文件 root@xxx.xxx.xxx.xxx:目标目录
 
@@ -63,7 +72,7 @@
 ***
 
 ## yum安装mongodb 3.4
-
+<a name='4'></a>
 **1. 配置mongodb yum源**
 > vim /etc/yum.repos.d/mongodb-org-3.4.repo
 
@@ -148,20 +157,20 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 <hr>
 
 ## yum安装vim
-
+<a name='vim'></a>
 > yum -y install vim*
 
 ***
 
 ## yum安装zip unzip
-
+<a name='zip'></a>
 > yum install zip unzip
 
 
 ***
 
 ## HTTP转HTTPS
-
+<a name='http'></a>
 *1.阿里云申报ssl证书*
 *2.证书导入*
 *3.Nginx配置*
@@ -178,7 +187,7 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 <hr>
 
 ## Docker搭建Sentry并结合tornado
-
+<a name='sentry'></a>
 *1.下载docker*
 > yum install docker
 
@@ -203,7 +212,7 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 <hr>
 
 ## Centos下查看cpu信息
-
+<a name='cpu'></a>
 *查看CPU型号：cpu型号是E7-4820*
 > cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
 
