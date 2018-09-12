@@ -191,3 +191,17 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *7.停止docker,重启*
 > docker-compose down && docker-compose up -d
 
+## Centos下查看cpu信息
+
+*查看CPU型号：cpu型号是E7-4820*
+> cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
+
+*查看物理cpu核心数*
+> cat /proc/cpuinfo | grep "physical id" | sort | uniq|wc -l
+
+*查看逻辑cpu的个数*
+> cat /proc/cpuinfo | grep "processor" |wc -l
+
+*查看cpu是几核*
+> cat /proc/cpuinfo | grep "cores"|uniq
+
