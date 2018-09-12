@@ -32,7 +32,7 @@
   3. yum-config-manager  # 找不到文件时 where
   
 ```
-***
+<hr>
 
 ## 修改pip镜像源
 1.  新建文件 ~/.pip/pip.conf 
@@ -138,7 +138,7 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 **9. 认证模式启动**
 > mongod --auth --config /etc/mongd.conf
 
-***
+<hr>
 
 ## yum安装vim
 
@@ -168,6 +168,8 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
         ssl_prefer_server_ciphers on;
 ```
 
+<hr>
+
 ## Docker搭建Sentry并结合tornado
 
 *1.下载docker*
@@ -191,6 +193,8 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *7.停止docker,重启*
 > docker-compose down && docker-compose up -d
 
+<hr>
+
 ## Centos下查看cpu信息
 
 *查看CPU型号：cpu型号是E7-4820*
@@ -205,3 +209,4 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *查看cpu是几核*
 > cat /proc/cpuinfo | grep "cores"|uniq
 
+<hr>
