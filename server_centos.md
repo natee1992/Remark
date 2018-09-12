@@ -188,3 +188,6 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *6.启动所有服务*
 > docker-compose up -d
 
+*7.停止docker,重启*
+> docker-compose down && docker-compose up -d
+
