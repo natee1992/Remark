@@ -1,13 +1,23 @@
 **目录导航**
+
 <a href='#1'>yum源安装python3.6</a>
+
 <a href='#2'>pip修改镜像源</a>
+
 <a href='#3'>scp传输文件/文件夹</a>
+
 <a href='#4'> yum安装mongodb 3.4</a>
+
 <a href='#vim'> yum安装vim</a>
-<a href='#zip> yum安装zip</a>
-<a href='#http> http转https</a>
-<a href='#sentry> docker搭建sentry</a>
+
+<a href='#zip'> yum安装zip</a>
+         
+<a href='#http'> http转https</a>
+         
+<a href='#sentry'> docker搭建sentry</a>
+         
 <a href='#cpu'>centos查看cpu信息</a>
+
 <hr>
 <hr>
 
