@@ -244,6 +244,8 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 ## flask+gunicorn+gevent+supervisor+nginx部署
 <a name='f_s_g'></a>
 
+***
+
 ## mongodb分片架构部署
 *服务器架构，3台主机服务器*
 
