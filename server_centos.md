@@ -20,6 +20,8 @@
 
 <a href='#f_s_g'>flask+gunicorn+gevent+supervisor+nginx部署</a>
 
+<a href='#mongodb'>mongodb分片架构部署</a>
+
 <hr>
 <hr>
 
@@ -245,4 +247,4 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 ## mongodb分片架构部署
 *服务器架构，3台主机服务器*
 
-<a name='f_s_g'></a>
+<a name='mongodb'></a>
