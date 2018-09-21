@@ -203,13 +203,33 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 ## Docker搭建Sentry并结合tornado
 <a name='sentry'></a>
 *1.下载docker*
-> yum install docker
+> yum install -y yum-utils
+
+> yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+> yum makecache fast
+
+> yum install docker-ce
+
+
+*安装指定版本docker*
+> yum install docker-ce-<VERSION>
+
+*列出版本*
+
+> yum list docker-ce.x86_64  --showduplicates |sort -r
+
+> yum install python-pip
+
+> pip insatll docker-compose
 
 *2.拉取sentry*
 > git clone https://github.com/getsentry/onpremise.git
 
 *3.构建容器并创建数据库和sentry安装目录*
 > mkdir -p data/{sentry,postgres}
+
+> cd onpremise
 
 *4.生成secret key并添加到docker-compose文件*
 > docker-compose run --rm web config generate-secret-key
