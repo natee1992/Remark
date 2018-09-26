@@ -22,6 +22,7 @@
 
 <a href='#mongodb'>mongodb分片架构部署</a>
 
+<a href='#mysql'>centos7安装mysql5.7</a>
 <hr>
 <hr>
 
@@ -270,3 +271,60 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *服务器架构，3台主机服务器*
 
 <a name='mongodb'></a>
+
+***
+
+## centos7安装mysql5.7
+
+<a name='mysql'></a>
+
+*配置 yum 源*
+> wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+
+> yum localinstall mysql57-community-release-el7-11.noarch.rpm
+
+*检查*
+>  yum repolist enabled | grep "mysql.*-community.*"
+
+*安装*
+> yum install -y mysql-community-server
+
+*启动*
+> systemctl start mysqld
+
+*查看本地账户密码*
+> grep 'temporary password' /var/log/mysqld.log
+
+*登录*
+> mysql -uroot -p
+
+*修改密码*
+> ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!'; 
+
+*推入修改*
+> flush privileges;
+
+*允许远程登录*
+> use mysql;
+
+> update user set host = '%' where user = 'root';
+
+> grant all privileges on *.* to 'root'@'%' identified by '#######';
+
+> flush privileges;
+
+*修改数据库默认编码格式*
+> vim /etc/my.cnf
+
+```
+[mysqld]
+character-set-server=utf8
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+```
+
+> systemctl stop mysqld
+
+> systemctl start mysqld
