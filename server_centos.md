@@ -316,6 +316,9 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
 *修改数据库默认编码格式*
 > vim /etc/my.cnf
 
+*查看数据库编码格式*
+> show variables like 'character%';
+
 ```
 [mysqld]
 character-set-server=utf8
