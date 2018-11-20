@@ -16,3 +16,50 @@
 **tornado是web服务器兼Web应用框架**
 tornado支持WebSockets
 
+
+### tornado.httpclient中 HTTPRequest
+```python
+        post_request = HTTPRequest(url=self.url, method='POST', headers=self.headers,body=json.dumps(msg),validate_cert=False)
+```
+validate_cert=False   关闭ssl验证
+**异步发送信息**
+```python
+import tornado
+from tornado import httpclient
+from tornado.httpclient import HTTPRequest
+import json
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+class YunPian:
+    def __init__(self, url):
+        self.url = url
+        self.headers = {
+            'Content-Type': 'application/json'
+        }
+
+    async def send_single_sms(self, code):
+        http_client = httpclient.AsyncHTTPClient()
+        msg = {
+            'msgtype': 'markdown',
+            'markdown': {
+                'title': 'sss',
+                'text': '##Tornado测试 web {}'.format(code)
+            }
+        }
+        post_request = HTTPRequest(url=self.url, method='POST', headers=self.headers, body=json.dumps(msg),validate_cert=False)
+        r = await http_client.fetch(post_request)
+        # return r
+        print(r.body.decode())
+
+
+if __name__ == '__main__':
+    io_loop = tornado.ioloop.IOLoop.current()
+    yun_pian = YunPian('https://oapi.dingtalk.com/robot/send?access_token=53d651435594a881174e70193cbb3369a0011c62a614fe27d428ff1cf4b55765')
+    # 将带有参数的函数封装成新函数
+    from functools import partial
+    new_func = partial(yun_pian.send_single_sms, 'client')
+    io_loop.run_sync(new_func)
+
+```
