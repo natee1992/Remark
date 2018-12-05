@@ -23,6 +23,8 @@
 <a href='#mongodb'>mongodb分片架构部署</a>
 
 <a href='#mysql'>centos7安装mysql5.7</a>
+
+<a href='#cron'>cron命令定时任务</a>
 <hr>
 <hr>
 
@@ -331,3 +333,56 @@ default-character-set=utf8
 > systemctl stop mysqld
 
 > systemctl start mysqld
+
+---
+## cron命令
+
+<a name='cron'></a>
+
+*查看定时任务*
+crontab -l
+
+*编辑定时任务*
+crontab -e
+
+*定时任务编写逻辑*
+
+```
+实例1：每1分钟执行一次myCommand
+* * * * * myCommand
+实例2：每小时的第3和第15分钟执行
+3,15 * * * * myCommand
+实例3：在上午8点到11点的第3和第15分钟执行
+3,15 8-11 * * * myCommand
+实例4：每隔两天的上午8点到11点的第3和第15分钟执行
+3,15 8-11 */2  *  * myCommand
+实例5：每周一上午8点到11点的第3和第15分钟执行
+3,15 8-11 * * 1 myCommand
+实例6：每晚的21:30重启smb
+30 21 * * * /etc/init.d/smb restart
+实例7：每月1、10、22日的4 : 45重启smb
+45 4 1,10,22 * * /etc/init.d/smb restart
+实例8：每周六、周日的1 : 10重启smb
+10 1 * * 6,0 /etc/init.d/smb restart
+实例9：每天18 : 00至23 : 00之间每隔30分钟重启smb
+0,30 18-23 * * * /etc/init.d/smb restart
+实例10：每星期六的晚上11 : 00 pm重启smb
+0 23 * * 6 /etc/init.d/smb restart
+实例11：每一小时重启smb
+* */1 * * * /etc/init.d/smb restart
+实例12：晚上11点到早上7点之间，每隔一小时重启smb
+0 23-7 * * * /etc/init.d/smb restart
+```
+*日志重定向*
+```
+每条任务调度执行完毕，系统都会将任务输出信息通过电子邮件的形式发送给当前系统用户，这样日积月累，日志信息会非常大，可能会影响系统的正常运行，因此，将每条任务进行重定向处理非常重要。 例如，可以在crontab文件中设置如下形式，忽略日志输出:
+
+0 */3 * * * /usr/local/apache2/apachectl restart >/dev/null 2>&1
+“/dev/null 2>&1”表示先将标准输出重定向到/dev/null，然后将标准错误重定向到标准输出，由于标准输出已经重定向到了/dev/null，因此标准错误也会重定向到/dev/null，这样日志输出问题就解决了。
+```
+
+*更换系统时区后重启定时任务*
+service cron restart
+
+*查看log日志*
+tail -f /var/log/cron
