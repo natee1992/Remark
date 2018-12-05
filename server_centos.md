@@ -339,6 +339,8 @@ default-character-set=utf8
 
 <a name='cron'></a>
 
+**/etc/cron.d 是系统级别的任务，/etc/crontab 需要添加用户 ，crontab -e 用户级别定时任务**
+
 *查看定时任务*
 
 > crontab -l
