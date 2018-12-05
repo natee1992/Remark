@@ -340,10 +340,11 @@ default-character-set=utf8
 <a name='cron'></a>
 
 *查看定时任务*
-crontab -l
+
+> crontab -l
 
 *编辑定时任务*
-crontab -e
+> crontab -e
 
 *定时任务编写逻辑*
 
@@ -373,7 +374,9 @@ crontab -e
 实例12：晚上11点到早上7点之间，每隔一小时重启smb
 0 23-7 * * * /etc/init.d/smb restart
 ```
+
 *日志重定向*
+
 ```
 每条任务调度执行完毕，系统都会将任务输出信息通过电子邮件的形式发送给当前系统用户，这样日积月累，日志信息会非常大，可能会影响系统的正常运行，因此，将每条任务进行重定向处理非常重要。 例如，可以在crontab文件中设置如下形式，忽略日志输出:
 
@@ -382,7 +385,9 @@ crontab -e
 ```
 
 *更换系统时区后重启定时任务*
-service cron restart
+
+> service cron restart
 
 *查看log日志*
-tail -f /var/log/cron
+
+> tail -f /var/log/cron
