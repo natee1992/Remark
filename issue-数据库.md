@@ -1,4 +1,4 @@
-###mongodb集群分片后count()计数错误
+### mongodb集群分片后count()计数错误
 
 > 描述
   在mongodb集群分片后，执行db.collection.find().count()命令，返回的条数和数据库实际存储数量对应错误
