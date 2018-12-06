@@ -11,4 +11,4 @@
   
 > 解决方案
   1. 使用aggregate聚合后使用{$group:{'_id': '','count':{'$sum': 1}}}
-  2. 使用db.collection.validate({full:true})进行全量验证扫描
+  2. 使用db.collection.validate({full:true})进行全量验证扫描 . db.runCommand({validate:"collection",full:true})
