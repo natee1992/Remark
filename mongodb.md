@@ -40,6 +40,8 @@
 ```
 ./mongoexport -h 10.101.xxx.xxx --port xxx -d xxx -c xxx -o xxx.json
 ```
+> mongoexport
+
 导入命令
 ```
 ./mongoimport -d xxx -c xxx xxx.json 
