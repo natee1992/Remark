@@ -14,9 +14,12 @@
 ## mongodb
 
 #### 源生语句和pymongo查询的区别
+
 <p id='con'></p>
- ### pymongo连接
-```
+
+### pymongo连接
+
+```python
 from config.config import Config
 from pymongo import MongoClient
 mongo = MongoClient(Config.MONGO_URI)
@@ -35,8 +38,11 @@ class Config:
             'xx.xxx.xx.xxx',
         ]
 ```
+
 ### pymongo查询
+
 <p id='query'></p>
+
 **比较运算查询**
 ```
 # lt、lte、gt、gte、in、nin、ne
@@ -51,7 +57,9 @@ db.xxx.find({$or:[{id:1},{age:100}]})
 db.xxx.find({id:{$exists:flase}})
 db.xxx.find({'id':null})  //同上功能
 ```
+
 **嵌套查询**
+
 ```
 #示例
 {
@@ -97,8 +105,11 @@ kw = db.表名.find_one({'_id': ObjectId(str(_id)})
 # 查询数组中是否包含
 kw = db.表名.find_one({'_id': ObjectId(str(_id),'manager':{'$in': '包含字段'}})
 ```
+
 ### pymongo插入
+
 <p id='insert'></p>
+
 **支持批量插入**
 ```
 for(var i=1;i<11;i++) db.students.insert({id:i,name:'ss',age:100+i})
@@ -118,16 +129,22 @@ ISODate("2014-04-12T21:49:17Z")
 
 ```
 ### mongodb更新
+
 <p id='update'></p>
+
 ```
 doc = db.表明.find_one()
 doc['first'] = 4
 db.表名.save(doc)
 ```
 mongodb 有固定集合可以覆盖之前的纪录
+
 #### 聚合查询 pymongo和源生通用
+
 <p id='aggregate'></p>
+
 *aggregate*
+
 ```python
 # $match 匹配
 
@@ -152,12 +169,14 @@ mongodb 有固定集合可以覆盖之前的纪录
 ```
 
 ### mongodb查询分析
+
 <p id='analysis'></p>
 
 开启 Profiling 功能，纪录性能日志
 >   level = 0 不纪录
     level = 1 纪录阀值
     level = 2 所有都纪录
+    
 ```
 drug:PRIMARY> db.system.profile.find().pretty()
 {
