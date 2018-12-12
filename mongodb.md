@@ -11,13 +11,45 @@
 
 <a href='#analysis'>查询分析</a>
 
-## mongodb
+<a href='#export'>数据导入导出</a>
 
-#### 源生语句和pymongo查询的区别
+### 数据导入导出
 
-<p id='con'></p>
+> mongoexport
+
+```
+-h：数据库宿主机的IP
+
+-u：数据库用户名
+
+-p：数据库密码
+
+-d：数据库名字
+
+-c：集合的名字
+
+-f：导出的列名
+
+-q：导出数据的过滤条件
+
+--csv：导出格式为csv
+
+
+```
+导出命令
+```
+./mongoexport -h 10.101.xxx.xxx --port xxx -d xxx -c xxx -o xxx.json
+```
+导入命令
+```
+./mongoimport -d xxx -c xxx xxx.json 
+```
+
+
 
 ### pymongo连接
+
+<p id='con'></p>
 
 ```python
 from config.config import Config
