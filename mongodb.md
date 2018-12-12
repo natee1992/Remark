@@ -1,4 +1,6 @@
 # 目录
+<a href='pymongo'>pymongo进程不安全，线程安全</a>
+
 <a href='#con'>pymongo连接</a>
 
 <a href='#query'>query查询</a>
@@ -12,6 +14,25 @@
 <a href='#analysis'>查询分析</a>
 
 <a href='#export'>数据导入导出</a>
+
+### pymongo安全性 与 motor
+
+```
+# 进程
+在一个新进程执行一个新的程序需要两个步骤:
+创建一个新进程 (fork)
+通过 exec 系统调用把新的二进制程序加载到该进程
+在早期的 UNIX 系统中,调用fork()时,内核会复制所有的内部数据结构. 现在的 UNIX 系统采用 copy-on-write(COW) 的惰性算法的优化策略. fork 新进程的时候,会共享同一个副本的内容. 如果有进行 write 操作,才开始拷贝内存,这样可以减少资源的浪费.
+
+# pymongo
+Pymongo 是线程安全的, 提供了内置的连接池供多线程应用使用,但不是fork-safe的. Pymongo会产生多个线程来跑后台任务,比如保活connections.这些后台线程通过锁来共享状态,而这些锁本身不是fork-safe的. 
+经过 fork 之后, Lock 包括 Lock 的状态都会被复制到子进程,所以当子进程需要用到 Lock 的时候, 有可能造成死锁.
+
+# motor
+Motor Mongo 是基于 Pymongo，可以在 Tornado 和 Asyncio 里使用的异步 Mongodb 库．在Motor-Asyncio中, Motor使用ThreadPoolExecutor将同步阻塞的pymongo请求放在多个线程中,通过callback回调来达到异步的效果. 
+Motor除了在底层上替换原有的通信过程，另外对PyMongo的API做了异步化的处理，使之兼容Tornado的异步调用过程。和PyMongo使用的不同就是像代码里展示的那样，类似Tornado里其他的异步调用一样，通过yield出一个Future来暂时挂起上下文，当Future被set_result的时候，在ioloop上注册callback来恢复上下文。也就是说:doc = yield db.test_collection.find_one({'i': {'$lt': 1}})这句并不会阻塞ioloop，而是暂时挂起了。Motor做到这点主要是利用了greenlet来封装原始的PyMongo的同步API
+
+```
 
 ### 数据导入导出
 
