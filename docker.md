@@ -21,3 +21,6 @@
 > ssh root@localhost -p 映射端口号
 
 ## Dockerfile
+*docker 时区问题+8或者-8*
+> RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+> && echo 'Asia/Shanghai' >/etc/timezone
