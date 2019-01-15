@@ -24,14 +24,18 @@ alarm_list.sort(key=lambda x: x["alarmTime"], reverse=True)
 ---
 
 ### python中的groupby函数
+
 <p id='groupby'></p>
+
 python中itertools的groupby函数可以通过指定的key对list做分组
 list按照分组字段必须是有序的
+
 ```python
 for key,group in groupby(list_demo,lamda x:x['date']):
-  print(key)
-  print(group)
+    print(key)
+    print(group)
 ```
+
 ---
 
 ### dict输出成json
@@ -113,11 +117,11 @@ mmap只需要一次系统调用，后续操作不需要系统调用
 
  
 
-     最后再说一下page cache的话题，从上面所说我们从磁盘文件中读取的内容都会存在page cache中，但当我们关闭这个文件时，page cache中内容会立马释放掉吗？答案是否，磁盘的读取速度比内存慢太多，如果能命中page cache可以显著提升性能，万一后续又有对这个文件的操作，系统就可以很快速的响应。当然，这些文件内容也不是一直存在page cache中的，一般只要系统有空闲物理内存，内核都会拿来当缓存使用，但当物理内存不够用，内存会清理出部分page cache应急，这也就是告诉我们程序对于物理内存的使用能省则省，交给内核使用，作用很大。
+   最后再说一下page cache的话题，从上面所说我们从磁盘文件中读取的内容都会存在page cache中，但当我们关闭这个文件时，page cache中内容会立马释放掉吗？答案是否，磁盘的读取速度比内存慢太多，如果能命中page cache可以显著提升性能，万一后续又有对这个文件的操作，系统就可以很快速的响应。当然，这些文件内容也不是一直存在page cache中的，一般只要系统有空闲物理内存，内核都会拿来当缓存使用，但当物理内存不够用，内存会清理出部分page cache应急，这也就是告诉我们程序对于物理内存的使用能省则省，交给内核使用，作用很大。
 
  
 
-     还有就是普通的write调用只是将数据写到page cache中，并将其标记为dirty就返回了，磁盘I/O通常不会立即执行，这样做的好处是减少磁盘的回写次数，提供吞吐率，不足就是机器一旦意外挂掉，page cache中的数据就会丢失。一般安全性比较高的程序会在每次write之后，调用fsync立即将page cache中的内容回写到磁盘中。
+   还有就是普通的write调用只是将数据写到page cache中，并将其标记为dirty就返回了，磁盘I/O通常不会立即执行，这样做的好处是减少磁盘的回写次数，提供吞吐率，不足就是机器一旦意外挂掉，page cache中的数据就会丢失。一般安全性比较高的程序会在每次write之后，调用fsync立即将page cache中的内容回写到磁盘中。
 
 *代码实现*
 ```python
