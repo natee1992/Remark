@@ -1,6 +1,7 @@
 <a href='#shiqu'>时区处理</a>
 <a href='#groupby'>groupby</a>
 <a href='#dict_to_json'>dict输出成json</a>
+<a href='#readfile'>读取大文件及扩展</a>
 
 
 ### 时区处理
@@ -44,4 +45,18 @@ d_str = json.dumps(d)
 with open('output.json','w+') as writer:
   writer.wirte(d)
  
+```
+### 读取大文件及扩展
+<p id='readfile'></p>
+
+> 使用with上下文管理器方法，系统自动设置缓冲区
+
+```python
+with open(file,'r') as f:
+  f.read()
+```
+
+> 使用chunk size 结合生成器
+
+```python
 ```
