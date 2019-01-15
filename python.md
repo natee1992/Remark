@@ -163,4 +163,7 @@ print(time.time() - a)
 ```
 
 综上，三种方法在同等机器配置，同等环境下，对900MB的文件处理速度分别约为：5.9s  ,  3.8s   , 0.9s
+
+mmap与read理解参考博客：https://blog.csdn.net/edwardlulinux/article/details/8604400
+
 ---
