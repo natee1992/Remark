@@ -1,12 +1,18 @@
 <a href='#shiqu'>时区处理</a>
+
 <a href='#groupby'>groupby</a>
+
 <a href='#dict_to_json'>dict输出成json</a>
+
 <a href='#readfile'>读取大文件及扩展</a>
 
 
 ### 时区处理
 <p id='shiqu'></p>
 python tzinfo
+
+---
+
 **时间排序**
 ```
 # 对alert_list列表自定义排序字段
@@ -14,6 +20,9 @@ python tzinfo
 # 排序参数
 alarm_list.sort(key=lambda x: x["alarmTime"], reverse=True)
 ```
+
+---
+
 ### python中的groupby函数
 <p id='groupby'></p>
 python中itertools的groupby函数可以通过指定的key对list做分组
@@ -23,7 +32,8 @@ for key,group in groupby(list_demo,lamda x:x['date']):
   print(key)
   print(group)
 ```
-  
+---
+
 ### dict输出成json
 <p id='dict_to_json'></p>
 
@@ -46,6 +56,8 @@ with open('output.json','w+') as writer:
   writer.wirte(d)
  
 ```
+---
+
 ### 读取大文件及扩展
 <p id='readfile'></p>
 
@@ -147,3 +159,4 @@ print(time.time() - a)
 ```
 
 综上，三种方法在同等机器配置，同等环境下，对900MB的文件处理速度分别约为：5.9s  ,  3.8s   , 0.9s
+---
