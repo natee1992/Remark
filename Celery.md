@@ -10,6 +10,7 @@ CELERY_IMPORTS = {
     'celery_app.task2'
 }
 
+CELERY_TIMEZONE = 'Asia/Shanghai'
 
 CELERYBEAT_SCHEDULE = {
     'task1' = {
@@ -23,4 +24,9 @@ CELERYBEAT_SCHEDULE = {
         'args': (2,3)    
     }
 }
+
 ```
+启动命令
+
+> celery beat -A worker -l 
+
