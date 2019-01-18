@@ -6,6 +6,8 @@
 
 <a href='#readfile'>读取大文件及扩展</a>
 
+<a href='#async'>异步async</a>
+
 ---
 ### 时区处理
 <p id='shiqu'></p>
@@ -167,3 +169,17 @@ print(time.time() - a)
 mmap与read理解参考博客：https://blog.csdn.net/edwardlulinux/article/details/8604400
 
 ---
+
+### Async异步
+
+<p id='#async'></p>
+
+**原理**
+
+基于linux操作系统底层selcet、epoll系统调用，同时监听多个socket客户端链接，当socket可读或者可写时候去处理。即一个事件循环，不断的轮询，在同一时间内监听大量的socket，通过单线程的方式提高了并发量。
+
+
+
+
+
+
