@@ -130,6 +130,9 @@ Run 'docker COMMAND --help' for more information on a command.
 查看日志
 > docker logs x
 
+查看最近50行日志
+> docker logs -f -t --tail 50 8ffe6610c91a
+
 ## Dockerfile
 *docker 时区问题+8或者-8*
 > RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
