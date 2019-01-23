@@ -9,6 +9,13 @@ Docker 提供了一个开发、打包、运行app的平台
 - REST API server
 - CLI接口 （docker）
 
+### 底层技术支持
+- Namespaces: 做隔离pid,net,ipc,mnt,uts
+- Control groups: 做资源限制
+- Union file systems: Container和image的分层
+### Image
+- 文件
+
 ### Docker 部署优势
 1. 不用考虑不同机器环境不同问题
 2. 生成镜像，pull之后，直接可start运行
