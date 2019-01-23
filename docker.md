@@ -2,6 +2,12 @@
 
 ### Docker简介
 docker 是一种容器技术，作用是用来快速部署服务
+Docker 提供了一个开发、打包、运行app的平台
+
+### Docker Engine
+- 后台进程 （dockerd）
+- REST API server
+- CLI接口 （docker）
 
 ### Docker 部署优势
 1. 不用考虑不同机器环境不同问题
