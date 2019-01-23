@@ -13,8 +13,64 @@ Docker 提供了一个开发、打包、运行app的平台
 - Namespaces: 做隔离pid,net,ipc,mnt,uts
 - Control groups: 做资源限制
 - Union file systems: Container和image的分层
+
 ### Image
-- 文件
+- 文件和meta data的集合（root filesystem）
+- 分层的，并且每一层都可以添加改变删除文件，成为一个新的image
+- 不同的image可以共享同样的layer（分层）
+- Image本身是read-only
+
+### Image的获取
+- Build from Dockerfile
+```
+FROM ubuntu:14.04          # 基础镜像
+LABEL maintainer='natee <nateeinit@xxx.com>' # 构建人信息
+RUN apt-get update && apt-get install -y redis-server  # 安装
+EXPOSE 6379   # 暴露端口
+ENTRYPOINT['/usr/bin/redis-server']
+```
+
+- Pull from Registry
+```
+docker pull ubuntu:14.04
+```
+
+### 构建Base Image
+- 构建c语言编译环境
+
+> yum install gcc
+
+> yum install glibc-static
+
+
+- 编写c语言helloworld
+
+> vim hello.c
+
+```c
+#include<stdio.h>
+
+int main()
+{
+    printf("hello natee\n");
+}
+```
+
+生成可执行文件hello
+
+> gcc -static hello.c -o hello
+
+- 在当前路径编写Dockerfile
+
+> vim Dockerfile
+
+```
+FROM scratch
+ADD hello /
+CMD ['/hello']
+```
+
+
 
 ### Docker 部署优势
 1. 不用考虑不同机器环境不同问题
