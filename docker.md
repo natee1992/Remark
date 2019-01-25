@@ -194,6 +194,17 @@ CMD ["python","app.py"]
 
 
 ### Docker Network
+- 公有IP和私有IP
+ - Public IP ： 互联网上的唯一标识，可以访问internet
+ - Private IP：不可在互联网上使用，仅供机构内部使用
+- 网络地址转换NAT
+路由器转换
+- Ping和telnet
+ - Ping（ICMP）： 验证IP的可达性
+ - telnet：验证服务的可用性
+- 网络的命名空间
+ - 查看：ip netns list
+ - 增加： ip netns add test
 
 
 
