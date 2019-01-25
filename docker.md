@@ -116,7 +116,7 @@ LABEL descroption='This is description'
 ```
 *LABEL的Metedata不可少*
 
-- RUN
+- RUN （执行命令并创建新的Image Layer）
 *每运行一次RUN对于Image都会生成新的一层，对于多命令可以通过 && 组合，复杂的RUN可以 通过 / 换行*
 
 - WOKERDIR
@@ -147,9 +147,40 @@ RUN apt-get install -y mysql-server= "${MYSQL_VERSION} && rm -rf /var/lib/apt/li
 
 - EXPOSE
 
-- CMD
+- CMD （设置容器启动后默认执行的命令和参数）
 
-- ENTRYOPOINT
+- ENTRYOPOINT （设置容器启动时运行的命令）
+让容器以应用程序或者服务的形式运行
+一定不会被忽略，一定会执行
+
+
+### 打包Python
+*准备一段flask-demo*
+```python
+from flask improt Flask
+app = Flask(__name__)
+@app.route('/')
+def index():
+    return 'hi natee'
+    
+if __name__ == '__main__':
+    app.run()
+```
+*编写Dockerfile*
+```
+FROM python:3.6
+LABEL maincontainer= "natee <nateeinit@163.com>"
+RUN pip install flask -i https://pypi.tuna.tsinghua.edu.cn/simple
+COPY /root/app.py /app/
+WORKDIR /app/
+EXPSOE 5000
+CMD ["python","app.py"]
+```
+*生成image*
+> build -t natee/flask-demo .
+
+
+
 
 
 
