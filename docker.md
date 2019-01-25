@@ -100,6 +100,19 @@ CMD ['/hello']
 
 > docker commit container名字 新image名字
 
+- 进入运行的容器
+> docker exec -it xxxxxx /bin/bash
+
+- 打开运行的容器的ip
+> docker exec -it xxxxx ip a
+
+- 查看容器信息
+> docker inspect xxxxxx
+
+- 查看容器运行产生输出log
+> docker logs xxxx
+
+
 
 ### Dockerfile
 
@@ -180,6 +193,7 @@ CMD ["python","app.py"]
 > build -t natee/flask-demo .
 
 
+### Docker Network
 
 
 
