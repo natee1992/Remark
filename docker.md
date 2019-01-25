@@ -65,10 +65,93 @@ int main()
 > vim Dockerfile
 
 ```
-FROM scratch
+FROM scratch  # emtpy image from docker hub
 ADD hello /
 CMD ['/hello']
 ```
+### Container
+
+- 通过Image创建(copy)
+- 在Image layer之上建立一个container layer（可读写）
+- 类比面向对象：类和实例
+- Image负责app的存储和分发，Container负责运行app
+
+### 运行Container
+
+- 交互式运行
+
+> docker run -it image-name
+
+但交互式运行后，运行exit会退出运行的docker
+
+- 列出所有container ID
+
+> docker ps -aq
+
+- 清除所有容器
+
+> docker rm $(docker ps -aq)
+
+- 删除已退出的容器
+
+> docker rm $(docker ps -f 'status=exited' -q)
+
+- 通过container创建image
+
+> docker commit container名字 新image名字
+
+
+### Dockerfile
+
+- FROM
+基于哪个Image来制作Image
+*尽量使用官方image*
+
+- LABEL
+定义Image的Metedata
+```
+LABEL maintainer='xxx@xxxgmail.com'
+LABEL version='1.0'
+LABEL descroption='This is description'
+```
+*LABEL的Metedata不可少*
+
+- RUN
+*每运行一次RUN对于Image都会生成新的一层，对于多命令可以通过 && 组合，复杂的RUN可以 通过 / 换行*
+
+- WOKERDIR
+```
+WOKREDIR /test # 如果没有会自动创建test目录
+WORKDIR demo
+RUN pwd  # 输出结果是 /test/demo
+```
+*使用WORKDIR 不要使用 RUN cd*
+*尽量使用绝对目录*
+
+- ADD and COPY
+```
+ADD test.tar.gz / # 添加到根目录并解压
+WORKDIR /root
+ADD hello /test # /root/test/hello
+```
+*大部分情况，copy优先ADD*
+*ADD除了COPY还有额外功能（解压）*
+*添加远程文件/目录使用curl或者wget*
+
+- ENV
+```
+ENV MYSQL_VERSION 5.6
+RUN apt-get install -y mysql-server= "${MYSQL_VERSION} && rm -rf /var/lib/apt/lists/*"   # 引用常量
+```
+- VOLUME
+
+- EXPOSE
+
+- CMD
+
+- ENTRYOPOINT
+
+
 
 
 
