@@ -264,7 +264,7 @@ ip a
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 ```
 
-- 连接两个namespace
+- 连接两个namespace（veth pair）
 利用Veth
 
 添加一对link
@@ -305,8 +305,239 @@ ip a
 
 ```
 
-将veth-test1 添加到
+将veth-test1 添加到test1这个namespace中
+> ip link set veth-test1 netns test1
 
+查看test1 namespace
+> ip netns exec test1 ip link
+
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+40: veth-test1@if39: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 7e:e4:e4:f7:a6:df brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+将veth-test2 添加到test2 中，同上
+```
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+39: veth-test2@if40: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether a6:68:6d:8a:bf:c8 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+给namespace分配地址
+> ip netns exec test1 ip addr add 192.168.1.1/24 dev veth-test1
+> ip netns exec test2 ip addr add 192.168.1.2/24 dev veth-test2
+
+启动端口
+> ip netns exec test1 ip link set dev veth-test1 up
+> ip netns exec test2 ip link set dev veth-test2 up
+
+查看namespace ip 状态
+
+> ip netns exec test1 ip a
+
+```
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+39: veth-test2@if40: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether a6:68:6d:8a:bf:c8 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.1.2/24 scope global veth-test2
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a468:6dff:fe8a:bfc8/64 scope link 
+       valid_lft forever preferred_lft forever
+```
+通过test1 Namespace ping test2
+>  ip netns exec test1 ping 192.168.1.2
+
+- 查看docker 网络
+> docker network ls
+
+查看network详情
+> docker network inspect xxxxx（network id）
+
+```
+[
+    {
+        "Name": "bridge",
+        "Id": "48b4577cd31d5da6801288dc0b3e546c11444e30e4045e052a0f2fe6ff11e8cb",
+        "Created": "2019-01-23T13:43:52.274217144+08:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Containers": {              
+            "1125b71014bfcb4e6e74f48475b40b58bdb3404f4212902b7781460896320876": {
+                "Name": "test1",
+                "EndpointID": "ed7d3b193f6909a59c50e519a53fdb99eb6135a4aefc3d8074bc6ea84102a150",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+```
+安装工具包
+> yum -y install bridge-untils
+
+查看网桥
+brctl show
+```
+bridge name	bridge id		STP enabled	interfaces
+br-127caf0addd2		8000.0242c92beb6d	no		veth24476dd
+							veth26076b7
+							veth33f120f
+							vetheb82e24
+docker0		8000.024222256526	no		veth505d8a5
+							vethbfcfa02
+
+```
+docker网络的连接方式
+```
+
+docker1（namespace1) ----(veth)--docker 0（宿主机namespace） --(veth)---docoker2（namespace）
+                                  |
+                                  |
+                                  |
+                                 NAT
+                                  |
+                                  |
+                                 外网
+
+```
+- Docker Link
+创建link 
+> docker run -d --name test2 --link test1 busybox /bin/sh -c "while true; do sleep 3600; done"
+
+创建link后在test2中可以ping test1
+
+- 创建bridge
+> docker network create -d bridge my-bridge
+
+**当两个docker连接到用户自定义的bridge上时 默认 --link **
+```
+
+docker1（namespace1) ----(veth)--docker 0（bridge） --(veth)---docoker2（namespace）
+                                  |                              |
+                                  |                              |
+                                  |                              |
+                                 NAT                        my-bridge(自定义)          
+                                  |
+                                  |
+                                 外网
+
+```
+- docker Host
+端口暴露(portmap)
+> -p 宿主机端口：docker端口
+
+**none network**
+> docker run -d --name test4 --network none busybox /bin/sh -c "while true; do sleep 3600; done"
+
+none 模式可以做安全机，只允许本地访问的容器
+
+**host network**
+> docker run -d --name test5 --network host busybox /bin/sh -c "while true; do sleep 3600; done"
+
+进入test5
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:16:3e:65:15:c3 brd ff:ff:ff:ff:ff:ff
+    inet 10.101.21.195/24 brd 10.101.21.255 scope global dynamic eth0
+       valid_lft 17301sec preferred_lft 17301sec
+    inet6 fe80::216:3eff:fe65:15c3/64 scope link 
+       valid_lft forever preferred_lft forever
+4: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue 
+    link/ether 02:42:22:25:65:26 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/16 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:22ff:fe25:6526/64 scope link 
+       valid_lft forever preferred_lft forever
+49: veth5debf6f@if48: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue master br-8652e66956a3 
+    link/ether ba:bf:0e:cd:30:93 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::b8bf:eff:fecd:3093/64 scope link 
+       valid_lft forever preferred_lft forever
+53: vethbcf87f1@if52: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue master docker0 
+    link/ether ae:4f:4e:91:5b:db brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::ac4f:4eff:fe91:5bdb/64 scope link 
+       valid_lft forever preferred_lft forever
+
+
+# 接口和宿主机的接口一样，因为和宿主机共享一套network networkspace,可能导致端口有冲突
+```
+### 多容器复杂应用的部署
+
+一个redis & 一个flask—redis
+
+flask
+```python
+import socket
+import os
+from redis import Redis
+from flask import Flask
+app = Flask(__name__)
+redis = Redis(host=os.environ.get('REDIS_HOST','127.0.0.1'),port=6379)
+@app.route('/')
+def hello():
+    redis.incr('hits')
+    return 'i have been %s times adn hostname'%(redis.get('hits'))
+
+app.run(host='0.0.0.0',port=5000)
+```
+Dockfile
+```
+FROM python:3.6
+LABEL maintainer="zhangbin <nateeinit@163.com>"
+RUN pip install flask redis -i https://pypi.tuna.tsinghua.edu.cn/simple
+COPY app.py /app/
+WORKDIR /app
+EXPOSE 5000
+CMD ["python","app.py"]
+```
+
+启动redis 
+> docker pull redis
+> docker run -d --name redis redis
+
+制作image
+> docker build -t natee/flask-redis .
+
+启动flask
+> docker run -d -p 5000:5000 --link redis --name flask-redis -e REDIS_HOST=redis natee/flask-redis
+
+
+**-e 参数给容器设置环境变量**
+
+
+### 不同linux中，多机器通信(overlay和underlay)
+
+- VXLAN
 
 
 
