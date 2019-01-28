@@ -205,7 +205,107 @@ CMD ["python","app.py"]
 - 网络的命名空间
  - 查看：ip netns list
  - 增加： ip netns add test
+ 
+- NameSpace实践
 
+```
+# 拉取busybox Image
+# 运行两个基于busybox的镜像
+# 分别进入两个容器
+docker exec -it xxxxxxx /bin/sh
+docker exec -it xxxxxx2 /bin/sh
+# 查看两个容器的命名空间
+ip a
+37: eth0@if38: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue 
+    link/ether 02:42:ac:12:00:04 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.4/16 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe12:4/64 scope link 
+       valid_lft forever preferred_lft forever
+       
+ip a
+35: eth0@if36: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue 
+    link/ether 02:42:ac:12:00:03 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.3/16 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe12:3/64 scope link 
+       valid_lft forever preferred_lft forever
+
+两个docker中可以互相ping通
+
+```
+**network space**
+- 查看
+> ip netns list
+
+- 创建
+> ip netns add test1
+> ip netns add test2
+
+- namespace中执行命令
+> ip netns exec test1 ip a
+
+```
+# 本地回环口
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+```
+> ip netns exec test1 ip link
+
+```
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+```
+启动
+> ip netns exec test1 ip link set dev lo up
+
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+```
+
+- 连接两个namespace
+利用Veth
+
+添加一对link
+> ip link add veth-test1 type veth peer name veth-test2
+
+查看本地ip link
+> ip link
+
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 00:16:3e:65:15:c3 brd ff:ff:ff:ff:ff:ff
+3: br-127caf0addd2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default 
+    link/ether 02:42:c9:2b:eb:6d brd ff:ff:ff:ff:ff:ff
+4: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default 
+    link/ether 02:42:22:25:65:26 brd ff:ff:ff:ff:ff:ff
+6: vetheb82e24@if5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-127caf0addd2 state UP mode DEFAULT group default 
+    link/ether 9a:dc:fd:23:5a:1b brd ff:ff:ff:ff:ff:ff link-netnsid 0
+8: veth24476dd@if7: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-127caf0addd2 state UP mode DEFAULT group default 
+    link/ether 32:40:13:30:ff:29 brd ff:ff:ff:ff:ff:ff link-netnsid 2
+10: veth33f120f@if9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-127caf0addd2 state UP mode DEFAULT group default 
+    link/ether 5a:0c:05:00:3f:59 brd ff:ff:ff:ff:ff:ff link-netnsid 3
+12: veth26076b7@if11: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-127caf0addd2 state UP mode DEFAULT group default 
+    link/ether d6:0d:16:c9:85:84 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+16: veth505d8a5@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default 
+    link/ether 66:05:0e:60:63:a6 brd ff:ff:ff:ff:ff:ff link-netnsid 4
+36: vethbfcfa02@if35: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default 
+    link/ether 3e:b4:db:29:4f:73 brd ff:ff:ff:ff:ff:ff link-netnsid 5
+38: veth51eff39@if37: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default 
+    link/ether 7a:29:85:0a:c0:2a brd ff:ff:ff:ff:ff:ff link-netnsid 6
+39: veth-test2@veth-test1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether a6:68:6d:8a:bf:c8 brd ff:ff:ff:ff:ff:ff
+40: veth-test1@veth-test2: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 7e:e4:e4:f7:a6:df brd ff:ff:ff:ff:ff:ff
+    
+# 多了一对 veth-test1 & veth-test2
+
+```
+
+将veth-test1 添加到
 
 
 
