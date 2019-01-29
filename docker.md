@@ -76,6 +76,18 @@ CMD ['/hello']
 - 类比面向对象：类和实例
 - Image负责app的存储和分发，Container负责运行app
 
+```
+   --------------
+   |   R/W layer |    ------------>  Container layer
+   --------------
+      #########   
+   ---------------   
+  |   9484894e4   |   -------
+   ---------------           |---->  Image layers (R/O)
+  |   s98232dw3   |   ------- 
+   ---------------
+```
+
 ### 运行Container
 
 - 交互式运行
@@ -539,6 +551,20 @@ CMD ["python","app.py"]
 
 - VXLAN
 
+依赖一个分布式储存
+**etcd**
+
+### Docker的持久化存储和数据共享
+**使用场景**
+容器产生的数据需要保存时：例如容器内使用数据库时
+
+<a href='https://github.com/natee1992/Remark/blob/master/WechatIMG5.png'></a>
+
+- 基于本地文件系统的Volume
+- 基于plugin的Volume
+ - volume的类型
+  - 受管理的data Volume，由docker后台自动创建
+  - 绑定挂载的Volume，挂载位置由用户指定
 
 
 
